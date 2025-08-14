@@ -163,10 +163,10 @@ public abstract class AndroidGame extends Activity implements Game {
                                     bluetoothVal0 = readMessage.charAt((t));
                                     number1 = Character.getNumericValue(bluetoothVal0);
                                     if ((number100 + number10 + number1) >= 0 && (number100 + number10 + number1) <= 999) {
-                                        for (int k = 1; k < 3499; k++) {
+                                        for (int k = 1; k < 2047; k++) {
                                             A2DVal[k] = A2DVal[k + 1];      //Shift all values 1 to the right. Rolling buffer
                                         }
-                                        A2DVal[3499] = (((number100 + number10 + number1) * -7) + 5000);
+                                        A2DVal[2047] = (((number100 + number10 + number1) * -7) + 5000);
                                         //  bufferFlag = 1;
                                         //if(GameScreen.A2DVal[j] < 40) {
                                         // GameScreen.A2DVal[j] = 40;
