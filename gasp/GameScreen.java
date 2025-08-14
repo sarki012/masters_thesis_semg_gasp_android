@@ -17,15 +17,28 @@ import static com.esark.gasp.Assets.whiteBackground;
 import static com.esark.gasp.Assets.redJoystick;
 import static com.esark.gasp.FFT.fft;
 
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 import java.util.List;
 
 public class GameScreen extends Screen implements Input {
     Context context = null;
 
     int xStart = 0, xStop = 0;
-    public static double[] A2DVal = new double[3500];
+    //public static double[] A2DVal = new double[3500];
+    public static double[] A2DVal = new double[2048];
     double[] psd = new double[2048];
 
+    double[] sineWave = new double[2048];
+
+    double[] psdResult = new double[2048];
+    int freq = 0;
+
+    double freqScalar = 1;
+    private static final double PI = 3.1415927;
+
+    public static final int PSDYVAL = 3850;
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -63,13 +76,47 @@ public class GameScreen extends Screen implements Input {
 
         //   if(landscape == 0) {
         g.drawPortraitPixmap(Assets.whiteBackground, 0, 0);
-        xStart = 0;
-        xStop = 1;
+    //    xStart = 300;
+      //  xStop = 301;
         int u = 0;
         //   for (int y = 1; y < 8; y++) {
+
+       // freqScalar = 0.1534;      //50
+      //  freqScalar = 64.34;
+        //freqScalar = 0.0155;
+       // freqScalar = 3.25;       //100
+        freqScalar = 1.63;      //200
+      //  freqScalar = 0.652;      //500
+
+        for(int h = 0; h < 2048; h++){
+            sineWave[h] = 100*sin(h/freqScalar);
+        }
+
+        //double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0}; // Example data
+        double fs = 1000.0; // Example sampling frequency (Hz)
+
+   //     PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
+     //   psdResult = psdCalc.calculatePSD(sineWave, fs);
+
+        PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(A2DVal, fs);
+        psdResult = psdCalc.calculatePSD(A2DVal, fs);
+
+        for (int i = 0; i < psdResult.length; i++) {
+            psdResult[i] = psdResult[i] * -0.025 + 3750;
+            System.out.println("Frequency Bin " + i + ": PSD = " + psdResult[i]);
+        }
+        xStart = 300;
+        xStop = 301;
+        for (int i = 1; i < psdResult.length; i++) {
+            g.drawBlackLine(xStart, (int) psdResult[i - 1], xStop, (int) psdResult[i], 0);
+            xStart = xStop;
+            xStop += 3;
+        }
+        /*
         Complex[] cinput = new Complex[2048];        //256 works
         for (int m = 0; m < 2048; m++) {
-            cinput[m] = new Complex(A2DVal[m], 0.0);
+           // cinput[m] = new Complex(A2DVal[m], 0.0);
+            cinput[m] = new Complex(sineWave[m], 0.0);
             xStart = xStop;
             xStop++;
         }
@@ -78,27 +125,36 @@ public class GameScreen extends Screen implements Input {
     //    System.out.println("Results:");
         for (Complex c : cinput) {
        //     System.out.println(c);
-            psd[u] = ((c.re * c.re + c.im * c.im) / -6000000) + 4500;
-            if(psd[u] < 4000){
-                psd[u] = 4000;
-            }
+           // psd[u] = ((c.re * c.re + c.im * c.im) / -6000000) + 3500;
+            psd[u] = ((c.re * c.re + c.im * c.im) / -10240000) + 3500;
+            //if(psd[u] < 5000){
+              //  psd[u] = 3000;
+            //}
       //      System.out.println("PSD:");
         //    System.out.println(psd[u]);
             u++;
         }
-        xStart = 200;
-        xStop = 201;
-        for (int i = 2; i < 2048; i++) {
+
+        xStart = 300;
+        xStop = 301;
+        for (int i = 1024; i < 2048; i++) {
             g.drawBlackLine(xStart, (int) psd[i - 1], xStop, (int) psd[i], 0);
             xStart = xStop;
-            xStop++;
+            xStop += 3;
         }
+
+         */
+        String freqString = String.valueOf(freq);
+        g.drawText("100", 330, PSDYVAL);
+        g.drawText("200", 785, PSDYVAL);
+        g.drawText("500", 1700, PSDYVAL);
+      //  g.drawText(freqString, 2300, 3700);
       //  while(bufferFlag == 0);
 
 
-        xStart = 3500;
-        xStop = 3499;
-        for (int n = 3499; n > 5; n--) {
+        xStart = 2048;
+        xStop = 2047;
+        for (int n = 2047; n > 5; n--) {
             g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 5]), 0);
             xStart = xStop;
             xStop -= 5;
