@@ -13,7 +13,7 @@ import com.esark.framework.Screen;
 
 import static com.esark.framework.AndroidGame.bufferFlag;
 import static com.esark.gasp.Assets.blueJoystick;
-import static com.esark.gasp.Assets.whiteBackground;
+import static com.esark.gasp.Assets.gaspMainBackground;
 import static com.esark.gasp.Assets.redJoystick;
 import static com.esark.gasp.FFT.fft;
 
@@ -27,7 +27,7 @@ public class GameScreen extends Screen implements Input {
 
     int xStart = 0, xStop = 0;
     //public static double[] A2DVal = new double[3500];
-    public static double[] A2DVal = new double[2048];
+    public static double[] A2DVal = new double[3500];
     double[] psd = new double[2048];
 
     double[] sineWave = new double[2048];
@@ -35,7 +35,11 @@ public class GameScreen extends Screen implements Input {
     double[] psdResult = new double[2048];
     int freq = 0;
 
-    double freqScalar = 1;
+    double freqScalar = 10;
+    int amplitude = 100;
+    int increasingFlag = 1;
+
+    int freqIncreasingFlag = 1;
     private static final double PI = 3.1415927;
 
     public static final int PSDYVAL = 3850;
@@ -64,7 +68,7 @@ public class GameScreen extends Screen implements Input {
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if (event.type == TouchEvent.TOUCH_UP) {
-                if (event.x < 100 && event.y < 50) {
+                if (event.x > 1750 && event.x < 3300 && event.y > 4700 && event.y < 4975) {
                     //Back Button Code Here
                     Intent intent2 = new Intent(context.getApplicationContext(), GaspSemg.class);
                     context.startActivity(intent2);
@@ -75,7 +79,8 @@ public class GameScreen extends Screen implements Input {
         }
 
         //   if(landscape == 0) {
-        g.drawPortraitPixmap(Assets.whiteBackground, 0, 0);
+        g.drawPortraitPixmap(Assets.gaspMainBackground, 0, 0);
+      //  g.drawRect(1750, 4700, 1550, 275, 0);       //Bluetooth Connect
     //    xStart = 300;
       //  xStop = 301;
         int u = 0;
@@ -85,32 +90,63 @@ public class GameScreen extends Screen implements Input {
       //  freqScalar = 64.34;
         //freqScalar = 0.0155;
        // freqScalar = 3.25;       //100
-        freqScalar = 1.63;      //200
+       // freqScalar = 1.63;      //200
       //  freqScalar = 0.652;      //500
 
         for(int h = 0; h < 2048; h++){
-            sineWave[h] = 100*sin(h/freqScalar);
+            sineWave[h] = amplitude*sin(h/freqScalar) + 700;
         }
-
+        if(increasingFlag == 1) {
+            amplitude += 50;
+            if (amplitude >= 500){
+                increasingFlag = 0;
+            }
+        }
+        else if(increasingFlag == 0){
+            amplitude -= 50;
+            if(amplitude <= 100){
+                increasingFlag = 1;
+            }
+        }
+        if(freqIncreasingFlag == 1) {
+            freqScalar --;
+            if (freqScalar <= 1){
+                freqIncreasingFlag = 0;
+            }
+        }
+        else if(freqIncreasingFlag == 0){
+            freqScalar ++;
+            if (freqScalar >= 10){
+                freqIncreasingFlag = 1;
+            }
+        }
         //double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0}; // Example data
-        double fs = 1000.0; // Example sampling frequency (Hz)
+        double fs = 100.0; // Example sampling frequency (Hz)
 
    //     PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
      //   psdResult = psdCalc.calculatePSD(sineWave, fs);
 
-        PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(A2DVal, fs);
-        psdResult = psdCalc.calculatePSD(A2DVal, fs);
+       // PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(A2DVal, fs);
+      //  psdResult = psdCalc.calculatePSD(A2DVal, fs);
+        PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
+        psdResult = psdCalc.calculatePSD(sineWave, fs);
 
         for (int i = 0; i < psdResult.length; i++) {
-            psdResult[i] = psdResult[i] * -0.025 + 3750;
+            psdResult[i] = psdResult[i] * -0.025 + 3233;
+            if(psdResult[i] < 2000){
+                psdResult[i] = 2000;
+            }
             System.out.println("Frequency Bin " + i + ": PSD = " + psdResult[i]);
         }
-        xStart = 300;
-        xStop = 301;
+        xStart = 365;
+        xStop = 366;
         for (int i = 1; i < psdResult.length; i++) {
-            g.drawBlackLine(xStart, (int) psdResult[i - 1], xStop, (int) psdResult[i], 0);
+            g.drawRedLine(xStart, (int) psdResult[i - 1], xStop, (int) psdResult[i], 0);
             xStart = xStop;
             xStop += 3;
+            if(xStop >= 3370){
+                break;
+            }
         }
         /*
         Complex[] cinput = new Complex[2048];        //256 works
@@ -145,21 +181,31 @@ public class GameScreen extends Screen implements Input {
 
          */
         String freqString = String.valueOf(freq);
-        g.drawText("100", 330, PSDYVAL);
-        g.drawText("200", 785, PSDYVAL);
-        g.drawText("500", 1700, PSDYVAL);
+      //  g.drawText("100", 330, PSDYVAL);
+        //g.drawText("200", 785, PSDYVAL);
+      //  g.drawText("500", 1700, PSDYVAL);
       //  g.drawText(freqString, 2300, 3700);
       //  while(bufferFlag == 0);
 
-
-        xStart = 2048;
-        xStop = 2047;
-        for (int n = 2047; n > 5; n--) {
-            g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 5]), 0);
+/*
+        xStart = 3500;
+        xStop = 3499;
+        for (int n = 2247; n > 5; n -= 2) {
+            g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 2]), 0);
             xStart = xStop;
-            xStop -= 5;
+            xStop-= 5;
         }
-
+*/
+        xStart = 3370;
+        xStop = 3369;
+        for (int n = 2047; n > 5; n -= 2) {
+            g.drawBlackLine(xStart, (int) sineWave[n], xStop, (int) (sineWave[n - 2]), 0);
+            xStart = xStop;
+            xStop-= 5;
+            if(xStart <= 380){
+                break;
+            }
+        }
 
      //   bufferFlag = 0;
        // SystemClock.sleep(10);

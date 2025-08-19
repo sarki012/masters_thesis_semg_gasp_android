@@ -105,9 +105,16 @@ public class AndroidGraphics extends AndroidGame implements Graphics {
         canvas.drawLine(x, y, x2, y2, paint);
         return;
     }
+    public void drawRedLine(int x, int y, int x2, int y2, int color) {
+
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(5);
+        canvas.drawLine(x, y, x2, y2, paint);
+        return;
+    }
 
     public void drawRect(int x, int y, int width, int height, int color) {
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         paint.setStyle(Style.FILL);
         canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
         return;
