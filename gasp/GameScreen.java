@@ -46,6 +46,9 @@ public class GameScreen extends Screen implements Input {
     long minutes = 0;
     long seconds = 0;
     long remainingMilliseconds = 0;
+    int rmsThresholdTouch = 0;
+    int rmsAmpThresh = 50, rmsWidthThresh = 0;
+    int leftUpCount = 0, leftDownCount = 0, rightUpCount = 0, rightDownCount = 0;
     private static final double PI = 3.1415927;
 
     public static final int PSDYVAL = 3850;
@@ -73,17 +76,46 @@ public class GameScreen extends Screen implements Input {
         //Check to see if paused
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
-            if (event.type == TouchEvent.TOUCH_UP) {
+            if(event.type == TouchEvent.TOUCH_UP){
+                if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
+                    //RMS threshold amplitude to trigger event
+                    leftUpCount = 0;       //Flag so we only increment the delay by 5 once per touch
+                }
+                else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
+                    //RMS threshold amplitude to trigger event
+                    leftDownCount = 0;       //Flag so we only increment the delay by 5 once per touch
+                }
+            }
+            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
                 if (event.x > 1750 && event.x < 3300 && event.y > 4700 && event.y < 4975) {
                     //Back Button Code Here
                     Intent intent2 = new Intent(context.getApplicationContext(), GaspSemg.class);
                     context.startActivity(intent2);
                     return;
                 }
-                if (event.x > 185 && event.x < 1735 && event.y > 3500 && event.y < 3775) {
+                else if (event.x > 185 && event.x < 1735 && event.y > 3500 && event.y < 3775) {
                     //Start
                     startTimeMillis = System.currentTimeMillis();
                     startRecording = 1;
+                }
+                else if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
+                    //RMS threshold amplitude to trigger event. Left Up Button.
+                    rmsThresholdTouch = 1;
+                    if (leftUpCount == 0) {       //Flag so we only increment the delay by 5 once per touch
+                        rmsAmpThresh += 5;
+                        leftUpCount = 1;
+                    }
+                }
+                else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
+                    //RMS threshold amplitude to trigger event. Left Down Button.
+                    rmsThresholdTouch = 1;
+                    if (leftDownCount == 0) {       //Flag so we only increment the delay by 5 once per touch
+                        rmsAmpThresh -= 5;
+                        leftDownCount = 1;
+                    }
+                }
+                if(rmsAmpThresh < 0){
+                    rmsAmpThresh = 0;
                 }
                 //else if (landscape == 1 && event.x < 100 && event.y > 230)
             }
@@ -93,7 +125,11 @@ public class GameScreen extends Screen implements Input {
         g.drawPortraitPixmap(Assets.gaspMainBackground, 0, 0);
       //  g.drawRect(1750, 4700, 1550, 275, 0);       //Bluetooth Connect
        // g.drawRect(185, 3500, 1550, 275, 0);       //Start
+     //   g.drawRect(900, 3875, 300, 275, 0);       //RMS Height Threshold Text
+     //   g.drawRect(1400, 3745, 275, 275, 0);       //Left Up Button
+     //   g.drawRect(1400, 4030, 275, 275, 0);       //Left Down Button
 
+        ////////////////// Start / Stop Recording //////////////////////////////////////////
         if(startRecording == 0){
             recDeltaTimeMillis = 0;
             minutes = 0;
@@ -111,6 +147,17 @@ public class GameScreen extends Screen implements Input {
             String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
             g.drawText(formattedTime, 1000, 3650);
         }
+
+        //////////////////// RMS Threshold to Trigger Event //////////////////////////////////
+        if(rmsThresholdTouch == 0) {
+            g.drawText("50", 940, 4040);
+        }
+        else if(rmsThresholdTouch == 1){
+            String rmsAmpThreshStr = String.valueOf(rmsAmpThresh);
+            g.drawText(rmsAmpThreshStr, 940, 4040);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////
     //    xStart = 300;
       //  xStop = 301;
         int u = 0;
