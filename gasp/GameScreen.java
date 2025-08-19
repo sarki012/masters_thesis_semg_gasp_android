@@ -38,8 +38,14 @@ public class GameScreen extends Screen implements Input {
     double freqScalar = 10;
     int amplitude = 100;
     int increasingFlag = 1;
-
     int freqIncreasingFlag = 1;
+    int startRecording = 0;
+    long startTimeMillis = 0;
+    long recDeltaTimeMillis = 0;
+    long currentTimeMillis = 0;
+    long minutes = 0;
+    long seconds = 0;
+    long remainingMilliseconds = 0;
     private static final double PI = 3.1415927;
 
     public static final int PSDYVAL = 3850;
@@ -74,6 +80,11 @@ public class GameScreen extends Screen implements Input {
                     context.startActivity(intent2);
                     return;
                 }
+                if (event.x > 185 && event.x < 1735 && event.y > 3500 && event.y < 3775) {
+                    //Start
+                    startTimeMillis = System.currentTimeMillis();
+                    startRecording = 1;
+                }
                 //else if (landscape == 1 && event.x < 100 && event.y > 230)
             }
         }
@@ -81,6 +92,25 @@ public class GameScreen extends Screen implements Input {
         //   if(landscape == 0) {
         g.drawPortraitPixmap(Assets.gaspMainBackground, 0, 0);
       //  g.drawRect(1750, 4700, 1550, 275, 0);       //Bluetooth Connect
+       // g.drawRect(185, 3500, 1550, 275, 0);       //Start
+
+        if(startRecording == 0){
+            recDeltaTimeMillis = 0;
+            minutes = 0;
+            seconds = 0;
+            remainingMilliseconds = 0;
+            String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
+            g.drawText(formattedTime, 1000, 3650);
+        }
+        else if(startRecording == 1){
+            currentTimeMillis = System.currentTimeMillis();
+            recDeltaTimeMillis = (int) (currentTimeMillis - startTimeMillis);
+            minutes = (int) recDeltaTimeMillis/60000;
+            seconds = (int) recDeltaTimeMillis/1000;
+            remainingMilliseconds = (int) recDeltaTimeMillis % 1000;
+            String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
+            g.drawText(formattedTime, 1000, 3650);
+        }
     //    xStart = 300;
       //  xStop = 301;
         int u = 0;
