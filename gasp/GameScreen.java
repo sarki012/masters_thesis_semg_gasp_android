@@ -55,13 +55,13 @@ public class GameScreen extends Screen implements Input {
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
-
+    public static int len = 0;
 
     //Constructor
     public GameScreen(Game game) {
         super(game);
     }
-
+    public GameScreenLastEvent gameScreenlastevent = new GameScreenLastEvent(game);
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -72,14 +72,14 @@ public class GameScreen extends Screen implements Input {
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, Context context) {
         //updateRunning() contains controller code of our MVC scheme
         Graphics g = game.getGraphics();
-        int len = touchEvents.size();
+        len = touchEvents.size();
         //Check to see if paused
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP){
                 if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
-                    //RMS threshold amplitude to trigger event
-                    leftUpCount = 0;       //Flag so we only increment the delay by 5 once per touch
+                    //RMS threshold amplitude to trigger event. Left up button.
+                     leftUpCount = 0;       //Flag so we only increment the delay by 5 once per touch
                 }
                 else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
                     //RMS threshold amplitude to trigger event
@@ -100,11 +100,15 @@ public class GameScreen extends Screen implements Input {
                 }
                 else if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
                     //RMS threshold amplitude to trigger event. Left Up Button.
+                    game.setScreen(gameScreenlastevent);
+                    /*
                     rmsThresholdTouch = 1;
                     if (leftUpCount == 0) {       //Flag so we only increment the delay by 5 once per touch
                         rmsAmpThresh += 5;
                         leftUpCount = 1;
                     }
+                    */
+
                 }
                 else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
                     //RMS threshold amplitude to trigger event. Left Down Button.
@@ -213,7 +217,7 @@ public class GameScreen extends Screen implements Input {
             if(psdResult[i] < 2000){
                 psdResult[i] = 2000;
             }
-            System.out.println("Frequency Bin " + i + ": PSD = " + psdResult[i]);
+           // System.out.println("Frequency Bin " + i + ": PSD = " + psdResult[i]);
         }
         xStart = 365;
         xStop = 366;
