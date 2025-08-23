@@ -1,5 +1,6 @@
 package com.esark.gasp;
 
+//import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventPSDArray;
 import static com.esark.gasp.GameScreen.len;
@@ -36,6 +37,7 @@ public class GameScreenLastEvent extends Screen implements Input {
     public GameScreenLastEvent(Game game) {
         super(game);
     }
+
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -53,10 +55,10 @@ public class GameScreenLastEvent extends Screen implements Input {
             TouchEvent event = touchEvents.get(i);
             if (event.type == TouchEvent.TOUCH_UP) {
             }
-            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) 
+            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
                 if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
                     //Artifact/PSD Screen
-              //      game.setScreen(gameScreen);
+                    game.setScreen(game.getStartScreen());
                 }
             }
         }
@@ -82,7 +84,8 @@ public class GameScreenLastEvent extends Screen implements Input {
                 break;
             }
         }
-    }
+
+}
 
     @Override
     public void present ( float deltaTime){
@@ -138,217 +141,3 @@ public class GameScreenLastEvent extends Screen implements Input {
         return null;
     }
 }
-                    /*
-                    numAvg = 10;
-                    xR = xTouchRight - 3400;
-                    yR = 1950 - yTouchRight;
-                    if (((int)Math.sqrt(Math.abs((xR*xR + yR*yR)))) > 570) {
-                        //Inverse tangent to find the angle
-                        angleR = Math.atan2((double) yR, (double) xR);
-                        //cos for x
-                        scaledXR = (int) (570 * Math.cos(angleR));
-                        //sin for y
-                        scaledYR = (int) (570 * Math.sin(angleR));
-                        //Save the previous values in case the user lifts a thumb
-                        xPrevRight = 3400 + scaledXR;
-                        yPrevRight = 1950 - scaledYR;
-                        //Draw the joystick maxed out
-                        g.drawJoystick(redJoystick, (3400 + scaledXR), (1950 - scaledYR));
-                        //Do a numAvg moving average of the x and y coordinates of the thumb presses
-                        //Shift all of the values in the temp arrays one value to the left
-                        for (h = 1; h < numAvg; h++) {
-                            tempCArr[h - 1] = tempCArr[h];
-                            tempBArr[h - 1] = tempBArr[h];
-                        }
-                        //Pop the new x and y coordinates onto the stacks
-                        tempCArr[numAvg - 1] = scaledXR;
-                        tempBArr[numAvg - 1] = scaledYR;
-                        //Once there are numAvg values in the stack rightCount = numAvg
-                        if (rightCount < numAvg) {
-                            rightCount++;
-                        }
-                        if (rightCount == numAvg) {
-                            //Loop to total up the numAvg values in each array
-                            for (j = 0; j < numAvg; j++) {
-                                tempC += tempCArr[j];
-                                tempB += tempBArr[j];
-                            }
-                            //The value to be sent out over Bluetooth is c. Take the average
-                            c = (int) (tempC / numAvg);
-                            //Make a dead zone along the y-axis. Otherwise both motors would always be spinning at the same time
-                            if (c > -40 && c < 40) {
-                                stopSendingCurl = 1;
-                            } else {
-                                stopSendingCurl = 0;
-                            }
-                            b = (int) (tempB / numAvg);
-                            //Make a dead zone along the x-axis. Otherwise both motors would always be spinning at the same time
-                            if (b > -40 && b < 40) {
-                                stopSendingBoom = 1;
-                            } else {
-                                stopSendingBoom = 0;
-                            }
-
-                            tempC = 0;
-                            tempB = 0;
-                        }
-                    } else if((((int)Math.sqrt(Math.abs((xR*xR + yR*yR))) <= 570))) {
-                        //The thumb is within the circle. Draw the joystick at the thumb press
-                        g.drawJoystick(redJoystick, xTouchRight, yTouchRight);
-
-                        //Do a numAvg moving average of the x and y coordinates of the thumb presses
-                        //Shift all of the values in the temp arrays one value to the left
-
-                        for (k = 1; k < numAvg; k++) {
-                            tempCArr[k - 1] = tempCArr[k];
-                            tempBArr[k - 1] = tempBArr[k];
-                        }
-
-
-
-
-                        //Pop the new x and y coordinates onto the stacks
-                        tempCArr[numAvg - 1] = xR;
-                        tempBArr[numAvg - 1] = yR;
-                        //Once there are numAvg values in the stack rightCount = numAvg
-                        if (rightCount < numAvg) {
-                            rightCount++;
-                        }
-                        if (rightCount == numAvg) {
-                            //Loop to total up the numAvg values in each array
-                            for (m = 0; m < numAvg; m++) {
-                                tempC += tempCArr[m];
-                                tempB += tempBArr[m];
-                            }
-                            //The value to be sent out over Bluetooth is c. Take the average
-                            c = (int) (tempC / numAvg);
-                            //Make a dead zone along the y-axis. Otherwise both motors would always be spinning at the same time
-                            if (c > -40 && c < 40) {
-                                stopSendingCurl = 1;
-                            } else {
-                                stopSendingCurl = 0;
-                            }
-                            b = (int) (tempB / numAvg);
-                            //Make a dead zone along the x-axis. Otherwise both motors would always be spinning at the same time
-                            if (b > -40 && b < 40) {
-                                stopSendingBoom = 1;
-                            } else {
-                                stopSendingBoom = 0;
-                            }
-
-                            tempC = 0;
-                            tempB = 0;
-                        }
-
-                    }
-                    xL = xTouchLeft - 150;
-                    yL = 275 - yTouchLeft;
-                    if (((int)Math.sqrt(Math.abs((xL*xL + yL*yL)))) > 85) {
-                        //Inverse tangent to find the angle
-                        angleL = Math.atan2((double) yL, (double) xL);
-                        //cos for x
-                        scaledXL = (int) (85 * Math.cos(angleL));
-                        //sin for y
-                        scaledYL = (int) (85 * Math.sin(angleL));
-                        //Save the previous values in case the user lifts a thumb
-                        xPrevLeft = 140 + scaledXL;
-                        yPrevLeft = 275 - scaledYL;
-                        //Draw the joystick maxed out
-                        g.drawCircle((140 + scaledXL), (275 - scaledYL), 45);
-                        g.drawLine(140, 275, (140 + scaledXL), (275 - scaledYL), 0);
-                        //Do a numAvg moving average of the x and y coordinates of the thumb presses
-                        //Shift all of the values in the temp arrays one value to the left
-                        for (k = 1; k < numAvg; k++) {
-                            tempOArr[k - 1] = tempOArr[k];          //O for orbit
-                            tempSArr[k - 1] = tempSArr[k];          //S for stick
-                        }
-                        //Pop the new x and y coordinates onto the stacks
-                        tempOArr[numAvg - 1] = scaledXL;
-                        tempSArr[numAvg - 1] = scaledYL;
-                        //Once there are numAvg values in the stack rightCount = numAvg
-                        if (leftCount < numAvg) {
-                            leftCount++;
-                        }
-                        if (leftCount == numAvg) {
-                            //Loop to total up the numAvg values in each array
-                            for (m = 0; m < numAvg; m++) {
-                                tempO += tempOArr[m];
-                                tempS += tempSArr[m];
-                            }
-                            //o for orbit. Take the average
-                            o = (int) (tempO / numAvg);
-                            //Make a dead zone along the y-axis. Otherwise both motors would always be spinning at the same time
-                            if (o > -40 && o < 40) {
-                                stopSendingOrbit = 1;
-                            } else {
-                                stopSendingOrbit = 0;
-                            }
-                            //s for stick. Take the average
-                            s = (int) (tempS / numAvg);
-                            //Make a dead zone along the x-axis. Otherwise both motors would always be spinning at the same time
-                            if (s > -40 && s < 40) {
-                                stopSendingStick = 1;
-                            } else {
-                                stopSendingStick = 0;
-                            }
-
-                            tempO = 0;
-                            tempS = 0;
-                        }
-                    } else if((((int)Math.sqrt(Math.abs((xL*xL + yL*yL))) <= 85))) {
-                        //The thumb is within the circle. Draw the joystick at the thumb press
-                        g.drawCircle((140 + xL), (275 - yL), 45);
-                        g.drawLine(140, 275, (140 + xL), (275 - yL), 0);
-
-
-                        //Do a numAvg moving average of the x and y coordinates of the thumb presses
-                        //Shift all of the values in the temp arrays one value to the left
-                        for (h = 1; h < numAvg; h++) {
-                            tempOArr[h - 1] = tempOArr[h];
-                            tempSArr[h - 1] = tempSArr[h];
-                        }
-
-                        //Pop the new x and y coordinates onto the stacks
-                        tempOArr[numAvg - 1] = xL;
-                        tempSArr[numAvg - 1] = yL;
-                        //Once there are numAvg values in the stack rightCount = numAvg
-                        if (leftCount < numAvg) {
-                            leftCount++;
-                        }
-
-
-                        if (leftCount == numAvg) {
-                            //Loop to total up the numAvg values in each array
-                            for (j = 0; j < numAvg; j++) {
-                                tempO += tempOArr[j];
-                                tempS += tempSArr[j];
-                            }
-                            //o for orbit. Take the average
-                            o = (int) (tempO / numAvg);
-                            //Make a dead zone along the y-axis. Otherwise both motors would always be spinning at the same time
-                            if (o > -40 && o < 40) {
-                                stopSendingOrbit = 1;
-                            } else {
-                                stopSendingOrbit = 0;
-                            }
-                            //s for stick
-                            s = (int) (tempS / numAvg);
-                            //Make a dead zone along the x-axis. Otherwise both motors would always be spinning at the same time
-                            if (s > -40 && s < 40) {
-                                stopSendingStick = 1;
-                            } else {
-                                stopSendingStick = 0;
-                            }
-
-                            tempO = 0;
-                            tempS = 0;
-                        }
-
-
-                    }
-                    g.drawCircle(290, yTrackLeft, 45);
-                    g.drawCircle(425, yTrackRight, 45);
-                    l = 110 - yTrackLeft;
-                    r = 110 - yTrackRight;
-                }
-              */
