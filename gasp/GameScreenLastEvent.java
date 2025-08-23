@@ -1,6 +1,5 @@
 package com.esark.gasp;
 
-//import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventPSDArray;
 import static com.esark.gasp.GameScreen.len;
@@ -37,7 +36,6 @@ public class GameScreenLastEvent extends Screen implements Input {
     public GameScreenLastEvent(Game game) {
         super(game);
     }
-   // public GameScreen gameScreen = new GameScreen(game);
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -55,7 +53,7 @@ public class GameScreenLastEvent extends Screen implements Input {
             TouchEvent event = touchEvents.get(i);
             if (event.type == TouchEvent.TOUCH_UP) {
             }
-            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
+            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) 
                 if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
                     //Artifact/PSD Screen
               //      game.setScreen(gameScreen);
@@ -84,8 +82,7 @@ public class GameScreenLastEvent extends Screen implements Input {
                 break;
             }
         }
-
-}
+    }
 
     @Override
     public void present ( float deltaTime){
