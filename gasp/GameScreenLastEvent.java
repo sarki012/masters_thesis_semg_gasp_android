@@ -1,5 +1,7 @@
 package com.esark.gasp;
 
+import static com.esark.gasp.GameScreen.lastEventArray;
+import static com.esark.gasp.GameScreen.lastEventPSDArray;
 import static com.esark.gasp.GameScreen.len;
 import static java.lang.Math.sin;
 
@@ -34,7 +36,6 @@ public class GameScreenLastEvent extends Screen implements Input {
     public GameScreenLastEvent(Game game) {
         super(game);
     }
-
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -45,23 +46,47 @@ public class GameScreenLastEvent extends Screen implements Input {
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, Context context) {
         //updateRunning() contains controller code of our MVC scheme
         Graphics g2 = game.getGraphics();
-        Assets.excavatorPortraitBackground = g2.newPixmap("excavatorPortraitBackground.png", Graphics.PixmapFormat.ARGB4444);
+        Assets.lastEventBackground = g2.newPixmap("lastEventBackground.png", Graphics.PixmapFormat.ARGB4444);
         len = touchEvents.size();
         //Check to see if paused
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if (event.type == TouchEvent.TOUCH_UP) {
             }
-            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
+            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) 
+                if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
+                    //Artifact/PSD Screen
+              //      game.setScreen(gameScreen);
+                }
             }
         }
-        g2.drawPortraitPixmap(Assets.excavatorPortraitBackground, 0, 0);
+        g2.drawPortraitPixmap(Assets.lastEventBackground, 0, 0);
+        xStart = 3370;
+        xStop = 3369;
+        for (int n = 2047; n > 5; n -= 2) {
+            g2.drawBlackLine(xStart, (int) lastEventArray[n], xStop, (int) (lastEventArray[n - 2]), 0);
+            xStart = xStop;
+            xStop-= 5;
+            if(xStart <= 380){
+                break;
+            }
+        }
 
-}
+        xStart = 365;
+        xStop = 366;
+        for (int i = 1; i < psdResult.length; i++) {
+            g2.drawRedLine(xStart, (int) lastEventPSDArray[i - 1], xStop, (int) lastEventPSDArray[i], 0);
+            xStart = xStop;
+            xStop += 3;
+            if(xStop >= 3370){
+                break;
+            }
+        }
+    }
 
     @Override
     public void present ( float deltaTime){
-        Graphics g = game.getGraphics();
+        Graphics g2 = game.getGraphics();
     }
 
     @Override

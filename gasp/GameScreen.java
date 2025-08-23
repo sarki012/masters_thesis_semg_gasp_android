@@ -12,9 +12,7 @@ import com.esark.framework.Pixmap;
 import com.esark.framework.Screen;
 
 import static com.esark.framework.AndroidGame.bufferFlag;
-import static com.esark.gasp.Assets.blueJoystick;
 import static com.esark.gasp.Assets.gaspMainBackground;
-import static com.esark.gasp.Assets.redJoystick;
 import static com.esark.gasp.FFT.fft;
 
 import static java.lang.Math.sin;
@@ -31,8 +29,9 @@ public class GameScreen extends Screen implements Input {
     double[] psd = new double[2048];
 
     double[] sineWave = new double[2048];
-
+    public static double[] lastEventArray = new double[2048];
     double[] psdResult = new double[2048];
+    public static double[] lastEventPSDArray = new double[2048];
     int freq = 0;
 
     double freqScalar = 10;
@@ -100,15 +99,11 @@ public class GameScreen extends Screen implements Input {
                 }
                 else if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
                     //RMS threshold amplitude to trigger event. Left Up Button.
-                    game.setScreen(gameScreenlastevent);
-                    /*
                     rmsThresholdTouch = 1;
                     if (leftUpCount == 0) {       //Flag so we only increment the delay by 5 once per touch
                         rmsAmpThresh += 5;
                         leftUpCount = 1;
                     }
-                    */
-
                 }
                 else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
                     //RMS threshold amplitude to trigger event. Left Down Button.
@@ -117,6 +112,19 @@ public class GameScreen extends Screen implements Input {
                         rmsAmpThresh -= 5;
                         leftDownCount = 1;
                     }
+                }
+                else if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
+                    //Manual Patient Event
+                    for(int r = 0; r < 2048; r++){
+                        lastEventArray[r] = sineWave[r];
+                    }
+                    for(int w = 0; w < psdResult.length; w++){
+                        lastEventPSDArray[w] = psdResult[w];
+                    }
+                }
+                else if (event.x > 1750 && event.x < 3300 && event.y > 4375 && event.y < 4650) {
+                    //Last Event
+                    game.setScreen(gameScreenlastevent);
                 }
                 if(rmsAmpThresh < 0){
                     rmsAmpThresh = 0;
@@ -132,6 +140,8 @@ public class GameScreen extends Screen implements Input {
      //   g.drawRect(900, 3875, 300, 275, 0);       //RMS Height Threshold Text
      //   g.drawRect(1400, 3745, 275, 275, 0);       //Left Up Button
      //   g.drawRect(1400, 4030, 275, 275, 0);       //Left Down Button
+     //   g.drawRect(185, 4375, 1550, 275, 0);       //Manual Patient Event
+     //   g.drawRect(1750, 4375, 1550, 275, 0);       //Last Event
 
         ////////////////// Start / Stop Recording //////////////////////////////////////////
         if(startRecording == 0){
@@ -175,7 +185,7 @@ public class GameScreen extends Screen implements Input {
       //  freqScalar = 0.652;      //500
 
         for(int h = 0; h < 2048; h++){
-            sineWave[h] = amplitude*sin(h/freqScalar) + 700;
+            sineWave[h] = (int)amplitude*sin(h/freqScalar) + 700;
         }
         if(increasingFlag == 1) {
             amplitude += 50;

@@ -15,8 +15,6 @@ public class LoadingScreen extends Screen {
     public void update(float deltaTime, Context context) {
         Graphics g = game.getGraphics();
         Assets.gaspMainBackground = g.newPixmap("gaspMainBackground.png", PixmapFormat.ARGB4444);
-        Assets.redJoystick = g.newPixmap("redJoystick.png", PixmapFormat.ARGB4444);
-        Assets.blueJoystick = g.newPixmap("blueSphereJoystick.png", PixmapFormat.ARGB4444);
         Assets.excavatorPortraitBackground = g.newPixmap("excavatorPortraitBackground.png", PixmapFormat.ARGB4444);
         game.setScreen(gameScreen);
     }
