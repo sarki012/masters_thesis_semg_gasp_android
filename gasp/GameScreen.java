@@ -60,7 +60,7 @@ public class GameScreen extends Screen implements Input {
     public GameScreen(Game game) {
         super(game);
     }
-    public GameScreenLastEvent gameScreenlastevent = new GameScreenLastEvent(game);
+    public GameScreenLastEvent gameScreenLastEvent = new GameScreenLastEvent(game);
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -124,7 +124,7 @@ public class GameScreen extends Screen implements Input {
                 }
                 else if (event.x > 1750 && event.x < 3300 && event.y > 4375 && event.y < 4650) {
                     //Last Event
-                    game.setScreen(gameScreenlastevent);
+                    game.setScreen(gameScreenLastEvent);
                 }
                 if(rmsAmpThresh < 0){
                     rmsAmpThresh = 0;

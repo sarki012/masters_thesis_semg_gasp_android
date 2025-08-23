@@ -52,7 +52,7 @@ public abstract class AndroidGame extends Activity implements Game {
     Audio audio;
     Input input;
     FileIO fileIO;
-    Screen screen;
+    public Screen screen;
 
     private final String TAG = AndroidGame.class.getSimpleName();
 
