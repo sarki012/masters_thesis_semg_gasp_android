@@ -53,9 +53,9 @@ public class GameScreenLastEvent extends Screen implements Input {
         //Check to see if paused
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
-            if (event.type == TouchEvent.TOUCH_UP) {
-            }
-            if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
+           // if (event.type == TouchEvent.TOUCH_UP) {
+           // }
+            if (event.type == TouchEvent.TOUCH_UP || event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
                 if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
                     //Artifact/PSD Screen
                     game.setScreen(game.getStartScreen());

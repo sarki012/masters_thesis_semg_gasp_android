@@ -150,7 +150,7 @@ public class GameScreen extends Screen implements Input {
             seconds = 0;
             remainingMilliseconds = 0;
             String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
-            g.drawText(formattedTime, 1000, 3650);
+            g.drawText(formattedTime, 1000, 3750);
         }
         else if(startRecording == 1){
             currentTimeMillis = System.currentTimeMillis();
@@ -159,16 +159,16 @@ public class GameScreen extends Screen implements Input {
             seconds = (int) recDeltaTimeMillis/1000;
             remainingMilliseconds = (int) recDeltaTimeMillis % 1000;
             String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
-            g.drawText(formattedTime, 1000, 3650);
+            g.drawText(formattedTime, 1000, 3750);
         }
 
         //////////////////// RMS Threshold to Trigger Event //////////////////////////////////
         if(rmsThresholdTouch == 0) {
-            g.drawText("50", 940, 4040);
+            g.drawText("50", 940, 4140);
         }
         else if(rmsThresholdTouch == 1){
             String rmsAmpThreshStr = String.valueOf(rmsAmpThresh);
-            g.drawText(rmsAmpThreshStr, 940, 4040);
+            g.drawText(rmsAmpThreshStr, 940, 4140);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ public class GameScreen extends Screen implements Input {
       //  freqScalar = 0.652;      //500
 
         for(int h = 0; h < 2048; h++){
-            sineWave[h] = (int)amplitude*sin(h/freqScalar) + 700;
+            sineWave[h] = (int)amplitude*sin(h/freqScalar) + 800;
         }
         if(increasingFlag == 1) {
             amplitude += 50;
@@ -287,12 +287,15 @@ public class GameScreen extends Screen implements Input {
             xStop-= 5;
         }
 */
-        xStart = 3370;
-        xStop = 3369;
-        for (int n = 2047; n > 5; n -= 2) {
-            g.drawBlackLine(xStart, (int) sineWave[n], xStop, (int) (sineWave[n - 2]), 0);
+        //xStart = 3370;
+        //xStop = 3369;
+        xStart = 2800;
+        xStop = 2799;
+        for (int n = 2047; n > 0; n -- ) {
+            g.drawBlackLine(xStart, (int) sineWave[n], xStop, (int) (sineWave[n - 1]), 0);
             xStart = xStop;
-            xStop-= 5;
+            //xStop-= 5;
+            xStop--;
             if(xStart <= 380){
                 break;
             }
