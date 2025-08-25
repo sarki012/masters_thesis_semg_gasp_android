@@ -1,7 +1,6 @@
 package com.esark.gasp;
 
 //import static com.esark.gasp.GameScreen.lastEventArray;
-
 import static com.esark.gasp.GameScreen.eventCount;
 import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventPSDArray;
@@ -14,7 +13,6 @@ import com.esark.framework.Game;
 import com.esark.framework.Graphics;
 import com.esark.framework.Input;
 import com.esark.framework.Screen;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +30,6 @@ public class GameScreenEventLog extends Screen implements Input {
     double[] sineWave = new double[2048];
 
     double[] psdResult = new double[2048];
-    
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -42,7 +39,7 @@ public class GameScreenEventLog extends Screen implements Input {
     public GameScreenEventLog(Game game) {
         super(game);
     }
-
+    public GameScreenEvent gameScreenEvent = new GameScreenEvent(game);
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -65,6 +62,22 @@ public class GameScreenEventLog extends Screen implements Input {
                 if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
                     //Artifact/PSD Screen
                     game.setScreen(game.getStartScreen());
+                }
+                if (event.x > 150 && event.x < 1550 && event.y > 500 && event.y < 1000) {
+                    eventCount = 1;
+                    game.setScreen(gameScreenEvent);
+                }
+                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                    eventCount = 2;
+                    game.setScreen(gameScreenEvent);
+                }
+                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                    eventCount = 3;
+                    game.setScreen(gameScreenEvent);
+                }
+                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                    eventCount = 4;
+                    game.setScreen(gameScreenEvent);
                 }
             }
         }
