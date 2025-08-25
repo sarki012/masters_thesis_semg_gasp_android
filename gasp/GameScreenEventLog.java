@@ -1,6 +1,7 @@
 package com.esark.gasp;
 
 //import static com.esark.gasp.GameScreen.lastEventArray;
+
 import static com.esark.gasp.GameScreen.eventCount;
 import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventPSDArray;
@@ -13,6 +14,7 @@ import com.esark.framework.Game;
 import com.esark.framework.Graphics;
 import com.esark.framework.Input;
 import com.esark.framework.Screen;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +32,7 @@ public class GameScreenEventLog extends Screen implements Input {
     double[] sineWave = new double[2048];
 
     double[] psdResult = new double[2048];
+    
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
