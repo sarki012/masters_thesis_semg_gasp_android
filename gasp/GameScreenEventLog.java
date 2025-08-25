@@ -1,9 +1,12 @@
 package com.esark.gasp;
 
 //import static com.esark.gasp.GameScreen.lastEventArray;
+
+import static com.esark.gasp.GameScreen.eventCount;
 import static com.esark.gasp.GameScreen.lastEventArray;
 import static com.esark.gasp.GameScreen.lastEventPSDArray;
 import static com.esark.gasp.GameScreen.len;
+import static com.esark.gasp.GameScreen.timeStamp;
 
 import android.content.Context;
 
@@ -12,7 +15,11 @@ import com.esark.framework.Graphics;
 import com.esark.framework.Input;
 import com.esark.framework.Screen;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameScreenEventLog extends Screen implements Input {
     Context context = null;
@@ -25,7 +32,7 @@ public class GameScreenEventLog extends Screen implements Input {
     double[] sineWave = new double[2048];
 
     double[] psdResult = new double[2048];
-
+    
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -45,8 +52,9 @@ public class GameScreenEventLog extends Screen implements Input {
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, Context context) {
         //updateRunning() contains controller code of our MVC scheme
-        Graphics g2 = game.getGraphics();
-        Assets.eventLogBackground = g2.newPixmap("eventLogBackground.png", Graphics.PixmapFormat.ARGB4444);
+        Graphics g = game.getGraphics();
+        Assets.eventLogBackground = g.newPixmap("eventLogBackground.png", Graphics.PixmapFormat.ARGB4444);
+        Assets.eventLogButton = g.newPixmap("eventLogButton.png", Graphics.PixmapFormat.ARGB4444);
         len = touchEvents.size();
         //Check to see if paused
         for (int i = 0; i < len; i++) {
@@ -60,12 +68,56 @@ public class GameScreenEventLog extends Screen implements Input {
                 }
             }
         }
-        g2.drawPortraitPixmap(Assets.eventLogBackground, 0, 0);
-}
+        g.drawPortraitPixmap(Assets.eventLogBackground, 0, 0);
+
+      //  long tsLong = System.currentTimeMillis() / 1000;
+        //String ts = tsLong.toString();
+      //  String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+
+        switch (eventCount) {
+            case 1:
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 500);
+                g.drawText(timeStamp[0], 250, 800);
+                break; // Optional: exits the switch statement
+            case 2:
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 500);
+                g.drawText(timeStamp[0], 250, 800);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 500);
+                g.drawText(timeStamp[1], 2150, 800);
+                break;
+            case 3:
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 500);
+                g.drawText(timeStamp[0], 250, 800);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 500);
+                g.drawText(timeStamp[1], 2150, 800);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 1050);
+                g.drawText(timeStamp[2], 250, 1350);
+                break; // Optional: exits the switch statement
+            case 4:
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 500);
+                g.drawText(timeStamp[0], 250, 800);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 500);
+                g.drawText(timeStamp[1], 2050, 800);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 1050);
+                g.drawText(timeStamp[2], 250, 1350);
+
+                g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 1050);
+                g.drawText(timeStamp[3], 2050, 1350);
+                break;
+            default:
+                // Code to execute if no case matches (optional)
+                break;
+        }
+    }
 
     @Override
     public void present ( float deltaTime){
-        Graphics g2 = game.getGraphics();
+        Graphics g = game.getGraphics();
     }
 
     @Override

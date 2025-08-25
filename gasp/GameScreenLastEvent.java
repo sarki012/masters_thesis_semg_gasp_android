@@ -47,8 +47,8 @@ public class GameScreenLastEvent extends Screen implements Input {
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, Context context) {
         //updateRunning() contains controller code of our MVC scheme
-        Graphics g2 = game.getGraphics();
-        Assets.lastEventBackground = g2.newPixmap("lastEventBackground.png", Graphics.PixmapFormat.ARGB4444);
+        Graphics g = game.getGraphics();
+        Assets.lastEventBackground = g.newPixmap("lastEventBackground.png", Graphics.PixmapFormat.ARGB4444);
         len = touchEvents.size();
         //Check to see if paused
         for (int i = 0; i < len; i++) {
@@ -62,11 +62,11 @@ public class GameScreenLastEvent extends Screen implements Input {
                 }
             }
         }
-        g2.drawPortraitPixmap(Assets.lastEventBackground, 0, 0);
+        g.drawPortraitPixmap(Assets.lastEventBackground, 0, 0);
         xStart = 3370;
         xStop = 3369;
         for (int n = 2047; n > 5; n -= 2) {
-            g2.drawBlackLine(xStart, (int) lastEventArray[n], xStop, (int) (lastEventArray[n - 2]), 0);
+            g.drawBlackLine(xStart, (int) lastEventArray[n], xStop, (int) (lastEventArray[n - 2]), 0);
             xStart = xStop;
             xStop-= 5;
             if(xStart <= 380){
@@ -77,7 +77,7 @@ public class GameScreenLastEvent extends Screen implements Input {
         xStart = 365;
         xStop = 366;
         for (int i = 1; i < psdResult.length; i++) {
-            g2.drawRedLine(xStart, (int) lastEventPSDArray[i - 1], xStop, (int) lastEventPSDArray[i], 0);
+            g.drawRedLine(xStart, (int) lastEventPSDArray[i - 1], xStop, (int) lastEventPSDArray[i], 0);
             xStart = xStop;
             xStop += 3;
             if(xStop >= 3370){
@@ -89,7 +89,7 @@ public class GameScreenLastEvent extends Screen implements Input {
 
     @Override
     public void present ( float deltaTime){
-        Graphics g2 = game.getGraphics();
+        Graphics g = game.getGraphics();
     }
 
     @Override
