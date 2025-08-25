@@ -18,6 +18,8 @@ import static com.esark.gasp.FFT.fft;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class GameScreen extends Screen implements Input {
@@ -54,7 +56,11 @@ public class GameScreen extends Screen implements Input {
     private static final int INVALID_POINTER_ID = -1;
     // The ‘active pointer’ is the one currently moving our object.
     private int mActivePointerId = INVALID_POINTER_ID;
+   // public static int len = 0;
     public static int len = 0;
+    public static String[] timeStamp = new String[100];
+    public static int eventCount = 0;
+    public int manualPatientEventUpCount = 0;
 
     //Constructor
     public GameScreen(Game game) {
@@ -72,20 +78,11 @@ public class GameScreen extends Screen implements Input {
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, Context context) {
         //updateRunning() contains controller code of our MVC scheme
         Graphics g = game.getGraphics();
+        g.drawPortraitPixmap(Assets.gaspMainBackground, 0, 0);
         len = touchEvents.size();
         //Check to see if paused
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
-            if(event.type == TouchEvent.TOUCH_UP){
-                if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
-                    //RMS threshold amplitude to trigger event. Left up button.
-                     leftUpCount = 0;       //Flag so we only increment the delay by 5 once per touch
-                }
-                else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
-                    //RMS threshold amplitude to trigger event
-                    leftDownCount = 0;       //Flag so we only increment the delay by 5 once per touch
-                }
-            }
             if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
                 if (event.x > 1750 && event.x < 3300 && event.y > 4700 && event.y < 4975) {
                     //Back Button Code Here
@@ -114,7 +111,7 @@ public class GameScreen extends Screen implements Input {
                         leftDownCount = 1;
                     }
                 }
-                else if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
+                else if (event.x > 185 && event.x < 1735 && event.y > 4300 && event.y < 4599) {
                     //Event Log Screen
                     game.setScreen(gameScreenEventLog);
                 }
@@ -122,13 +119,19 @@ public class GameScreen extends Screen implements Input {
                     //Last Event
                     game.setScreen(gameScreenLastEvent);
                 }
-                else if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                else if (event.x > 185 && event.x < 1735 && event.y > 4600 && event.y < 5000) {
                     //Manual Patient Event
-                    for(int r = 0; r < 2048; r++){
-                        lastEventArray[r] = sineWave[r];
-                    }
-                    for(int w = 0; w < psdResult.length; w++){
-                        lastEventPSDArray[w] = psdResult[w];
+                    if (manualPatientEventUpCount == 0) {       //Flag so we only increment the delay by 5 once per touch
+                        for(int r = 0; r < 2048; r++){
+                            lastEventArray[r] = sineWave[r];
+                        }
+                        for(int w = 0; w < psdResult.length; w++){
+                            lastEventPSDArray[w] = psdResult[w];
+                        }
+                        eventCount++;
+                        manualPatientEventUpCount = 1;
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        timeStamp[eventCount - 1]  = dateFormat.format(new Date());
                     }
                 }
                 if(rmsAmpThresh < 0){
@@ -136,19 +139,34 @@ public class GameScreen extends Screen implements Input {
                 }
                 //else if (landscape == 1 && event.x < 100 && event.y > 230)
             }
+            else if(event.type == TouchEvent.TOUCH_UP){
+                if (event.x > 1400 && event.x < 1675 && event.y > 3745 && event.y < 4020) {
+                    //RMS threshold amplitude to trigger event. Left up button.
+                     leftUpCount = 0;       //Flag so we only increment the delay by 5 once per touch
+                }
+                else if (event.x > 1400 && event.x < 1675 && event.y > 4030 && event.y < 4305) {
+                    //RMS threshold amplitude to trigger event
+                    leftDownCount = 0;       //Flag so we only increment the delay by 5 once per touch
+                }
+                else if(event.x > 185 && event.x < 1735 && event.y > 4600 && event.y < 5000) {
+                    //Manual Patient Event
+                    manualPatientEventUpCount = 0;
+                }
+            }
         }
 
         //   if(landscape == 0) {
-        g.drawPortraitPixmap(Assets.gaspMainBackground, 0, 0);
+
       //  g.drawRect(1750, 4700, 1550, 275, 0);       //Bluetooth Connect
        // g.drawRect(185, 3500, 1550, 275, 0);       //Start
      //   g.drawRect(900, 3875, 300, 275, 0);       //RMS Height Threshold Text
      //   g.drawRect(1400, 3745, 275, 275, 0);       //Left Up Button
      //   g.drawRect(1400, 4030, 275, 275, 0);       //Left Down Button
-     //   g.drawRect(185, 4375, 1550, 275, 0);       //Event Log
+      //  g.drawRect(185, 4300, 1550, 299, 0);       //Event Log
      //   g.drawRect(1750, 4375, 1550, 275, 0);       //Last Event
-       // g.drawRect(185, 4700, 1550, 275, 0);       //Manual Patient Event
-
+       // g.drawRect(185, 4600, 1550, 400, 0);       //Manual Patient Event
+        String eventCountStr = String.valueOf(eventCount);
+        g.drawText(eventCountStr, 15, 4730);
         ////////////////// Start / Stop Recording //////////////////////////////////////////
         if(startRecording == 0){
             recDeltaTimeMillis = 0;
