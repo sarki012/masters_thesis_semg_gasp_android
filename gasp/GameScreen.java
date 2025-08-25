@@ -61,6 +61,7 @@ public class GameScreen extends Screen implements Input {
         super(game);
     }
     public GameScreenLastEvent gameScreenLastEvent = new GameScreenLastEvent(game);
+    public GameScreenEventLog gameScreenEventLog = new GameScreenEventLog(game);
     @Override
     public void update(float deltaTime, Context context) {
         //framework.input
@@ -114,6 +115,14 @@ public class GameScreen extends Screen implements Input {
                     }
                 }
                 else if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
+                    //Event Log Screen
+                    game.setScreen(gameScreenEventLog);
+                }
+                else if (event.x > 1750 && event.x < 3300 && event.y > 4375 && event.y < 4650) {
+                    //Last Event
+                    game.setScreen(gameScreenLastEvent);
+                }
+                else if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
                     //Manual Patient Event
                     for(int r = 0; r < 2048; r++){
                         lastEventArray[r] = sineWave[r];
@@ -121,10 +130,6 @@ public class GameScreen extends Screen implements Input {
                     for(int w = 0; w < psdResult.length; w++){
                         lastEventPSDArray[w] = psdResult[w];
                     }
-                }
-                else if (event.x > 1750 && event.x < 3300 && event.y > 4375 && event.y < 4650) {
-                    //Last Event
-                    game.setScreen(gameScreenLastEvent);
                 }
                 if(rmsAmpThresh < 0){
                     rmsAmpThresh = 0;
@@ -140,8 +145,9 @@ public class GameScreen extends Screen implements Input {
      //   g.drawRect(900, 3875, 300, 275, 0);       //RMS Height Threshold Text
      //   g.drawRect(1400, 3745, 275, 275, 0);       //Left Up Button
      //   g.drawRect(1400, 4030, 275, 275, 0);       //Left Down Button
-     //   g.drawRect(185, 4375, 1550, 275, 0);       //Manual Patient Event
+     //   g.drawRect(185, 4375, 1550, 275, 0);       //Event Log
      //   g.drawRect(1750, 4375, 1550, 275, 0);       //Last Event
+       // g.drawRect(185, 4700, 1550, 275, 0);       //Manual Patient Event
 
         ////////////////// Start / Stop Recording //////////////////////////////////////////
         if(startRecording == 0){

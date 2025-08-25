@@ -56,7 +56,7 @@ public class GameScreenLastEvent extends Screen implements Input {
            // if (event.type == TouchEvent.TOUCH_UP) {
            // }
             if (event.type == TouchEvent.TOUCH_UP || event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
-                if (event.x > 185 && event.x < 1735 && event.y > 4375 && event.y < 4650) {
+                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
                     //Artifact/PSD Screen
                     game.setScreen(game.getStartScreen());
                 }
