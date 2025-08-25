@@ -38,7 +38,7 @@ public class GameScreen extends Screen implements Input {
     public static double[] lastEventPSDArray = new double[2048];
     int freq = 0;
 
-    double freqScalar = 10;
+    double freqScalar = 100;
     int amplitude = 100;
     int increasingFlag = 1;
     int freqIncreasingFlag = 1;
@@ -86,7 +86,7 @@ public class GameScreen extends Screen implements Input {
         for (int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if (event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
-                if (event.x > 1750 && event.x < 3300 && event.y > 4700 && event.y < 4975) {
+                if (event.x > 1750 && event.x < 3300 && event.y > 4600 && event.y < 5000) {
                     //Back Button Code Here
                     Intent intent2 = new Intent(context.getApplicationContext(), GaspSemg.class);
                     context.startActivity(intent2);
@@ -117,9 +117,10 @@ public class GameScreen extends Screen implements Input {
                     //Event Log Screen
                     game.setScreen(gameScreenEventLog);
                 }
-                else if (event.x > 1750 && event.x < 3300 && event.y > 4375 && event.y < 4650) {
-                    //Last Event
-                    game.setScreen(gameScreenLastEvent);
+                else if (event.x > 1750 && event.x < 3300 && event.y > 4300 && event.y < 4599) {
+                    //Last Event. (Now clear events
+                    //game.setScreen(gameScreenLastEvent);
+                    eventCount = 0;
                 }
                 else if (event.x > 185 && event.x < 1735 && event.y > 4600 && event.y < 5000) {
                     //Manual Patient Event
@@ -159,16 +160,16 @@ public class GameScreen extends Screen implements Input {
 
         //   if(landscape == 0) {
 
-      //  g.drawRect(1750, 4700, 1550, 275, 0);       //Bluetooth Connect
+      //  g.drawRect(1750, 4600, 1550, 400, 0);       //Bluetooth Connect
        // g.drawRect(185, 3500, 1550, 275, 0);       //Start
      //   g.drawRect(900, 3875, 300, 275, 0);       //RMS Height Threshold Text
      //   g.drawRect(1400, 3745, 275, 275, 0);       //Left Up Button
      //   g.drawRect(1400, 4030, 275, 275, 0);       //Left Down Button
       //  g.drawRect(185, 4300, 1550, 299, 0);       //Event Log
-     //   g.drawRect(1750, 4375, 1550, 275, 0);       //Last Event
+     //   g.drawRect(1750, 4300, 1550, 299, 0);       //Last Event
        // g.drawRect(185, 4600, 1550, 400, 0);       //Manual Patient Event
         String eventCountStr = String.valueOf(eventCount);
-        g.drawText(eventCountStr, 15, 4730);
+        g.drawText(eventCountStr, 1550, 4800);
         ////////////////// Start / Stop Recording //////////////////////////////////////////
         if(startRecording == 0){
             recDeltaTimeMillis = 0;
@@ -176,7 +177,7 @@ public class GameScreen extends Screen implements Input {
             seconds = 0;
             remainingMilliseconds = 0;
             String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
-            g.drawText(formattedTime, 1000, 3750);
+            g.drawText(formattedTime, 1000, 3700);
         }
         else if(startRecording == 1){
             currentTimeMillis = System.currentTimeMillis();
@@ -185,16 +186,16 @@ public class GameScreen extends Screen implements Input {
             seconds = (int) recDeltaTimeMillis/1000;
             remainingMilliseconds = (int) recDeltaTimeMillis % 1000;
             String formattedTime = String.format("%02d:%02d:%03d", minutes, seconds, remainingMilliseconds);
-            g.drawText(formattedTime, 1000, 3750);
+            g.drawText(formattedTime, 1000, 3700);
         }
 
         //////////////////// RMS Threshold to Trigger Event //////////////////////////////////
         if(rmsThresholdTouch == 0) {
-            g.drawText("50", 940, 4140);
+            g.drawText("50", 940, 4090);
         }
         else if(rmsThresholdTouch == 1){
             String rmsAmpThreshStr = String.valueOf(rmsAmpThresh);
-            g.drawText(rmsAmpThreshStr, 940, 4140);
+            g.drawText(rmsAmpThreshStr, 940, 4090);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////
@@ -227,18 +228,18 @@ public class GameScreen extends Screen implements Input {
         }
         if(freqIncreasingFlag == 1) {
             freqScalar --;
-            if (freqScalar <= 1){
+            if (freqScalar <= 10){
                 freqIncreasingFlag = 0;
             }
         }
         else if(freqIncreasingFlag == 0){
             freqScalar ++;
-            if (freqScalar >= 10){
+            if (freqScalar >= 100){
                 freqIncreasingFlag = 1;
             }
         }
         //double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0}; // Example data
-        double fs = 100.0; // Example sampling frequency (Hz)
+        double fs = 10.0; // Example sampling frequency (Hz)
 
    //     PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
      //   psdResult = psdCalc.calculatePSD(sineWave, fs);
@@ -255,12 +256,12 @@ public class GameScreen extends Screen implements Input {
             }
            // System.out.println("Frequency Bin " + i + ": PSD = " + psdResult[i]);
         }
-        xStart = 365;
-        xStop = 366;
+        xStart = 400;
+        xStop = 410;
         for (int i = 1; i < psdResult.length; i++) {
             g.drawRedLine(xStart, (int) psdResult[i - 1], xStop, (int) psdResult[i], 0);
             xStart = xStop;
-            xStop += 3;
+            xStop += 10;
             if(xStop >= 3370){
                 break;
             }

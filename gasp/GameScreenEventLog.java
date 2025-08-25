@@ -63,20 +63,24 @@ public class GameScreenEventLog extends Screen implements Input {
                     //Artifact/PSD Screen
                     game.setScreen(game.getStartScreen());
                 }
+                //Button 1
                 if (event.x > 150 && event.x < 1550 && event.y > 500 && event.y < 1000) {
+                    eventCount = 0;
+                    game.setScreen(gameScreenEvent);
+                }
+                //Button 2
+                if (event.x > 1900 && event.x < 3300 && event.y > 500 && event.y < 1000) {
                     eventCount = 1;
                     game.setScreen(gameScreenEvent);
                 }
-                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                //Button 3
+                if (event.x > 150 && event.x < 1550 && event.y > 1050 && event.y < 1550) {
                     eventCount = 2;
                     game.setScreen(gameScreenEvent);
                 }
-                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                //Button 4
+                if (event.x > 1900 && event.x < 3300 && event.y > 1050 && event.y < 1550) {
                     eventCount = 3;
-                    game.setScreen(gameScreenEvent);
-                }
-                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
-                    eventCount = 4;
                     game.setScreen(gameScreenEvent);
                 }
             }
@@ -97,14 +101,14 @@ public class GameScreenEventLog extends Screen implements Input {
                 g.drawText(timeStamp[0], 250, 800);
 
                 g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 500);
-                g.drawText(timeStamp[1], 2150, 800);
+                g.drawText(timeStamp[1], 2050, 800);
                 break;
             case 3:
                 g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 500);
                 g.drawText(timeStamp[0], 250, 800);
 
                 g.drawEventLogButtonPixmap(Assets.eventLogButton, 1900, 500);
-                g.drawText(timeStamp[1], 2150, 800);
+                g.drawText(timeStamp[1], 2050, 800);
 
                 g.drawEventLogButtonPixmap(Assets.eventLogButton, 150, 1050);
                 g.drawText(timeStamp[2], 250, 1350);

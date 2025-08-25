@@ -55,13 +55,14 @@ public class GameScreenEvent extends Screen implements Input {
            // if (event.type == TouchEvent.TOUCH_UP) {
            // }
             if (event.type == TouchEvent.TOUCH_UP || event.type == TouchEvent.TOUCH_DRAGGED || event.type == TouchEvent.TOUCH_DOWN) {
-                if (event.x > 185 && event.x < 1735 && event.y > 4700 && event.y < 4975) {
+                if (event.x > 185 && event.x < 1735 && event.y > 4600 && event.y < 5000) {
                     //Artifact/PSD Screen
                     game.setScreen(game.getStartScreen());
                 }
             }
         }
         g.drawPortraitPixmap(Assets.lastEventBackground, 0, 0);
+       // g.drawRect(185, 4600, 1550, 400, 0);       //Artifact/PSD screen
         xStart = 3370;
         xStop = 3369;
         for (int n = 2047; n > 5; n -= 2) {
@@ -73,12 +74,12 @@ public class GameScreenEvent extends Screen implements Input {
             }
         }
 
-        xStart = 365;
-        xStop = 366;
+        xStart = 400;
+        xStop = 410;
         for (int i = 1; i < psdResult.length; i++) {
             g.drawRedLine(xStart, (int) PSDArray[eventCount][i - 1], xStop, (int) PSDArray[eventCount][i], 0);
             xStart = xStop;
-            xStop += 3;
+            xStop += 10;
             if(xStop >= 3370){
                 break;
             }
