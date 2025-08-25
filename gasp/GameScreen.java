@@ -31,8 +31,10 @@ public class GameScreen extends Screen implements Input {
     double[] psd = new double[2048];
 
     double[] sineWave = new double[2048];
+    public static double[][] eventArray = new double [20][2048];
     public static double[] lastEventArray = new double[2048];
     double[] psdResult = new double[2048];
+    public static double[][] PSDArray = new double[20][2048];
     public static double[] lastEventPSDArray = new double[2048];
     int freq = 0;
 
@@ -123,15 +125,15 @@ public class GameScreen extends Screen implements Input {
                     //Manual Patient Event
                     if (manualPatientEventUpCount == 0) {       //Flag so we only increment the delay by 5 once per touch
                         for(int r = 0; r < 2048; r++){
-                            lastEventArray[r] = sineWave[r];
+                            eventArray[eventCount][r] = sineWave[r];
                         }
                         for(int w = 0; w < psdResult.length; w++){
-                            lastEventPSDArray[w] = psdResult[w];
+                            PSDArray[eventCount][w] = psdResult[w];
                         }
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        timeStamp[eventCount]  = dateFormat.format(new Date());
                         eventCount++;
                         manualPatientEventUpCount = 1;
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        timeStamp[eventCount - 1]  = dateFormat.format(new Date());
                     }
                 }
                 if(rmsAmpThresh < 0){
