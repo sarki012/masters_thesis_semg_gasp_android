@@ -27,7 +27,7 @@ public class GameScreen extends Screen implements Input {
 
     int xStart = 0, xStop = 0;
     //public static double[] A2DVal = new double[3500];
-    public static double[] A2DVal = new double[3500];
+    public static double[] A2DVal = new double[500];
     double[] psd = new double[2048];
 
     double[] sineWave = new double[2048];
@@ -210,7 +210,7 @@ public class GameScreen extends Screen implements Input {
        // freqScalar = 3.25;       //100
        // freqScalar = 1.63;      //200
       //  freqScalar = 0.652;      //500
-
+/*
         for(int h = 0; h < 2048; h++){
             sineWave[h] = (int)amplitude*sin(h/freqScalar) + 800;
         }
@@ -305,15 +305,15 @@ public class GameScreen extends Screen implements Input {
       //  g.drawText(freqString, 2300, 3700);
       //  while(bufferFlag == 0);
 
-/*
+
         xStart = 3500;
         xStop = 3499;
-        for (int n = 2247; n > 5; n -= 2) {
-            g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 2]), 0);
+        for (int n = 499; n > 2; n --) {
+            g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 1]), 0);
             xStart = xStop;
-            xStop-= 5;
+            xStop-= 15;
         }
-*/
+/*
         //xStart = 3370;
         //xStop = 3369;
         xStart = 2800;
@@ -330,6 +330,8 @@ public class GameScreen extends Screen implements Input {
 
      //   bufferFlag = 0;
        // SystemClock.sleep(10);
+       */
+
 
 }
 
