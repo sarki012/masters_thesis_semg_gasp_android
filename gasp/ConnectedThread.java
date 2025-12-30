@@ -45,10 +45,11 @@ public class ConnectedThread extends Thread {
             try {
                 // Read from the InputStream
                 bytes = mmInStream.available();
-                byte[] buffer = new byte[60];
+                byte[] buffer = new byte[23];
                 if (bytes != 0) {
                     //SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed. Originally 100
-                    bytes = mmInStream.read(buffer, 0, 50); // record how many bytes we actually read
+                    bytes = mmInStream.read(buffer, 0, 23); // record how many bytes we actually read
+                   // SystemClock.sleep(5);
                     mHandler.obtainMessage(AndroidGame.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget(); // Send the obtained bytes to the UI activity
 
@@ -58,7 +59,7 @@ public class ConnectedThread extends Thread {
 
                 break;
             }
-            write("a");
+         //   write("a");
         }
     }
 

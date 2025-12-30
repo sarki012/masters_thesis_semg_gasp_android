@@ -78,19 +78,22 @@ public abstract class AndroidGame extends Activity implements Game {
     private Handler mHandler; // Our main handler that will receive callback notifications
     private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
     private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
-
+    private int number10000 = 0;
     private int number1000 = 0;
     private int number100 = 0;
     private int number10 = 0;
     private int number1 = 0;
+    private int totalA2DVal = 0;
     private int numberHolder = 0;
     private int numberCount = 0;
+    private char bluetoothVal4 = 0;
     private char bluetoothVal3 = 0;
     private char bluetoothVal2 = 0;
     private char bluetoothVal1 = 0;
     private char bluetoothVal0 = 0;
     private int j = 0;
     int n = 0;
+    int i = 0;
     int t = 0;
     public static int landscape = 0;
     public static char startChar = 0;
@@ -145,15 +148,30 @@ public abstract class AndroidGame extends Activity implements Game {
                 if(msg.what == MESSAGE_READ){
                     String readMessage = null;
                     try {
+                        t = 0;
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
                         System.out.println(readMessage);
-
-                        for(int t = 0; t < 40; t++) {
+                        while (readMessage.charAt(t) != 'a') {
+                            t++;
+                            if(t == 22){
+                                break;
+                            }
+                        }
+                        for(i = 0; i < 3; i++) {
                            // if(readMessage.charAt(t) == 'a' | readMessage.charAt(t) <= 9 | readMessage.charAt(t) == '-'){
                             if (readMessage.charAt(t) == 'a') {         //Next char is a number
                                 t++;
-                                t++;    //Skip over the 0
-                                if(Character.getNumericValue(readMessage.charAt(t)) >= 0 && Character.getNumericValue(readMessage.charAt(t)) <= 9 && Character.getNumericValue(readMessage.charAt(t + 1)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 1)) <= 9 && Character.getNumericValue(readMessage.charAt(t + 2)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 2)) <= 9) {
+                                if(Character.getNumericValue(readMessage.charAt(t)) >= 0 && Character.getNumericValue(readMessage.charAt(t)) <= 9 &&
+                                        Character.getNumericValue(readMessage.charAt(t + 1)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 1)) <= 9 &&
+                                        Character.getNumericValue(readMessage.charAt(t + 2)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 2)) <= 9 &&
+                                        Character.getNumericValue(readMessage.charAt(t + 3)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 3)) <= 9 &&
+                                        Character.getNumericValue(readMessage.charAt(t + 4)) >= 0 && Character.getNumericValue(readMessage.charAt(t + 4)) <= 9 ) {
+                                    bluetoothVal4 = readMessage.charAt((t));
+                                    number10000 = (Character.getNumericValue(bluetoothVal4)) * 10000;
+                                    t++;
+                                    bluetoothVal3 = readMessage.charAt((t));
+                                    number1000 = (Character.getNumericValue(bluetoothVal3)) * 1000;
+                                    t++;
                                     bluetoothVal2 = readMessage.charAt((t));
                                     number100 = (Character.getNumericValue(bluetoothVal2)) * 100;
                                     t++;
@@ -162,11 +180,13 @@ public abstract class AndroidGame extends Activity implements Game {
                                     t++;
                                     bluetoothVal0 = readMessage.charAt((t));
                                     number1 = Character.getNumericValue(bluetoothVal0);
-                                    if ((number100 + number10 + number1) >= 0 && (number100 + number10 + number1) <= 999) {
-                                        for (int k = 201; k < 2247; k++) {
+                                    totalA2DVal = number10000 + number1000 + number100 + number10 + number1;
+                                    if (totalA2DVal > 0 && totalA2DVal <= 99999) {
+                                        for (int k = 0; k < 499; k++) {
                                             A2DVal[k] = A2DVal[k + 1];      //Shift all values 1 to the right. Rolling buffer
                                         }
-                                        A2DVal[2247] = (((number100 + number10 + number1) * -7) + 5000);
+                                        A2DVal[499] = (((double) totalA2DVal /-2 + 1700));
+                                   //     System.out.println("A2DVal[2247] " + A2DVal[2247]);
                                         //  bufferFlag = 1;
                                         //if(GameScreen.A2DVal[j] < 40) {
                                         // GameScreen.A2DVal[j] = 40;
