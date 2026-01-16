@@ -238,16 +238,27 @@ public class GameScreen extends Screen implements Input {
                 freqIncreasingFlag = 1;
             }
         }
+        */
+        xStart = 3350;
+        xStop = 3335;
+        for (int n = 499; n > 2; n --) {
+            g.drawBlackLine(xStart, (int) A2DVal[n], xStop, (int) (A2DVal[n - 1]), 0);
+            xStart = xStop;
+            xStop-= 15;
+            if(xStop <= 410){
+                break;
+            }
+        }
         //double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0}; // Example data
         double fs = 10.0; // Example sampling frequency (Hz)
 
    //     PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
      //   psdResult = psdCalc.calculatePSD(sineWave, fs);
 
-       // PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(A2DVal, fs);
-      //  psdResult = psdCalc.calculatePSD(A2DVal, fs);
-        PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
-        psdResult = psdCalc.calculatePSD(sineWave, fs);
+        PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(A2DVal, fs);
+        psdResult = psdCalc.calculatePSD(A2DVal, fs);
+     //   PowerSpectralDensityCalculator psdCalc = new PowerSpectralDensityCalculator(sineWave, fs);
+      //  psdResult = psdCalc.calculatePSD(sineWave, fs);
 
         for (int i = 0; i < psdResult.length; i++) {
             psdResult[i] = psdResult[i] * -0.025 + 3233;
@@ -297,7 +308,7 @@ public class GameScreen extends Screen implements Input {
             xStop += 3;
         }
 
-         */
+
         String freqString = String.valueOf(freq);
       //  g.drawText("100", 330, PSDYVAL);
         //g.drawText("200", 785, PSDYVAL);
